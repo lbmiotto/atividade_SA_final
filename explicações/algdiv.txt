@@ -1,0 +1,22 @@
+.section .text
+.global algdiv
+
+algdiv:
+    MOV R0, #10       @ Dividendo (por exemplo, 10)
+    MOV R1, #3        @ Divisor (por exemplo, 3)
+
+    MOV R2, #0        @ Inicializa o quociente como 0
+    MOV R3, R0        @ Salva o dividendo original em R3
+
+loop:
+    CMP R0, R1        @ Verifica se o dividendo é menor que o divisor
+    BLT end           @ Se sim, termina o loop
+
+    SUB R0, R0, R1    @ Subtrai o divisor do dividendo
+    ADD R2, R2, #1    @ Incrementa o quociente
+    B loop            @ Volta para o início do loop
+
+end:
+    @ O quociente da divisão estará em R2
+    @ O resto da divisão estará em R3
+    BKPT #0           @ Ponto de interrupção para encerrar o programa

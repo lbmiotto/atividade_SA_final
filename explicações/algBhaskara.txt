@@ -1,0 +1,65 @@
+.section .text
+.global bhaskara
+
+bhaskara:
+    MOV R0, #1        @ Coeficiente 'a'
+    MOV R1, #-3       @ Coeficiente 'b'
+    MOV R2, #2        @ Coeficiente 'c'
+
+    MOV R3, R1        @ R3 = b
+    MUL R4, R3, R3    @ R4 = b * b
+    MOV R5, R0        @ R5 = a
+    MUL R5, R5, R2    @ R5 = a * c
+    ADD R5, R5, R5    @ R5 = 2 * a * c
+
+    SUB R4, R4, R5    @ R4 = b * b - 4 * a * c
+
+    CMP R4, #0        @ Verifica o discriminante
+    BLT no_solution   @ Se o discriminante for negativo, não há solução
+
+    MOV R5, R4        @ R5 = discriminante
+
+    BL sqrt           @ Calcula a raiz quadrada do discriminante
+
+    MOV R6, R1        @ R6 = -b
+    ADD R6, R6, R0    @ R6 = -b + raiz do discriminante
+
+    MOV R7, R1        @ R7 = -b
+    SUB R7, R7, R0    @ R7 = -b - raiz do discriminante
+
+    MOV R8, R0        @ R8 = 2 * a
+    ADD R8, R8, R0    @ R8 = 2 * a
+
+    MUL R6, R6, R8    @ R6 = (-b + raiz do discriminante) * 2a
+    MUL R7, R7, R8    @ R7 = (-b - raiz do discriminante) * 2a
+
+    MOV R0, R6        @ R0 = primeira raiz
+    MOV R1, R7        @ R1 = segunda raiz
+
+    BKPT #0           @ Ponto de interrupção para encerrar o programa
+
+no_solution:
+    MOV R0, #0        @ Define a primeira raiz como zero
+    MOV R1, #0        @ Define a segunda raiz como zero
+    BKPT #0           @ Ponto de interrupção para encerrar o programa
+
+sqrt:
+    MOV R6, R5        @ Inicializa o iterador da raiz quadrada
+    MOV R7, #0        @ Inicializa a estimativa inicial
+    MOV R8, #12       @ Define o número de iterações
+
+sqrt_loop:
+    CMP R8, #0        @ Verifica se ainda há iterações
+    BEQ sqrt_done     @ Se não houver, termina o loop
+
+    CMP R5, R7, LSR #1  @ Verifica se o iterador é maior ou igual à estimativa
+    BLS sqrt_done     @ Se sim, termina o loop
+
+    ADD R7, R7, R6    @ Atualiza a estimativa
+    LSR R7, #1        @ Divide a estimativa por 2
+    SUB R6, R6, #1    @ Decrementa o iterador
+    B sqrt_loop       @ Volta para o início do loop
+
+sqrt_done:
+    MOV LR, PC        @ Retorna para o endereço da próxima instrução após a chamada
+    BX LR             @ Retorna para a função chamadora

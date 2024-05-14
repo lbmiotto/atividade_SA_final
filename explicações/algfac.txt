@@ -1,0 +1,20 @@
+.section .text
+.global algfac
+
+algfac:
+    MOV R0, #5        @ Número do qual queremos calcular o fatorial (por exemplo, 5)
+    MOV R1, #1        @ Inicializa o fatorial como 1
+
+    MOV R2, #1        @ Inicializa o contador como 1
+
+loop:
+    CMP R2, R0        @ Verifica se o contador atingiu o número original
+    BEQ end           @ Se sim, termina o loop
+
+    MUL R1, R1, R2    @ Multiplica o fatorial atual pelo contador
+    ADD R2, R2, #1    @ Incrementa o contador
+    B loop            @ Volta para o início do loop
+
+end:
+    @ O resultado do fatorial estará em R1
+    BKPT #0           @ Ponto de interrupção para encerrar o programa

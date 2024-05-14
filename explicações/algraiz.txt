@@ -1,0 +1,27 @@
+.section .text
+.global algraiz
+
+algraiz:
+    MOV R0, #9       @ Número do qual queremos calcular a raiz quadrada
+    MOV R1, #0        @ Inicializa o contador
+    MOV R2, #0        @ Inicializa o resultado da raiz quadrada
+
+loop:
+    CMP R1, R0        @ Verifica se o contador atingiu o número original
+    BEQ end           @ Se sim, termina o loop
+
+    ADD R1, R1, #1    @ Incrementa o contador
+
+    MOV R3, R1, LSL #1  @ R3 = contador * contador
+    CMP R3, R0        @ Compara R3 com o número original
+    BGT resultado        @ Se R3 for maior que o número original, vamos ao resultado
+
+    B loop            @ Volta para o início do loop
+
+resultado:
+    SUB R1, R1, #1    @ Decrementa o contador
+    MOV R2, R1        @ Armazena o resultado da raiz quadrada em R2
+
+end:
+    @ O resultado da raiz quadrada estará em R2
+    BKPT #0           @ Ponto de interrupção para encerrar o programa

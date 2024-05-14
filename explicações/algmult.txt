@@ -1,0 +1,19 @@
+.section .text
+.global algmult
+
+algmult:
+    MOV R0, #5        @ Carrega o multiplicando (primeiro número) em R0
+    MOV R1, #7        @ Carrega o multiplicador (segundo número) em R1
+    MOV R2, #0        @ Zera o registrador que irá armazenar o resultado
+
+loop:
+    CMP R1, #0        @ Verifica se o multiplicador é zero
+    BEQ end           @ Se for zero, termina o loop
+
+    ADD R2, R2, R0    @ Adiciona o multiplicando ao resultado
+    SUB R1, R1, #1    @ Decrementa o multiplicador
+    B loop            @ Volta para o início do loop
+
+end:
+    @ O resultado da multiplicação estará em R2
+    BKPT #0           @ Ponto de interrupção para encerrar o programa
